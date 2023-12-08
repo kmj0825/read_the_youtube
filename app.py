@@ -27,8 +27,7 @@ openai_api_key = "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"
 
 def youtube_text(link):
     yt = YouTube(link)
-    yt.streams.filter(only_audio=True).first().download \
-        (output_path=".", filename="temp/test.mp3")
+    yt.streams.filter(only_audio=True).first().download(output_path=".", filename="test.mp3")
 
     start = time.time()
     model = whisper.load_model("small")
@@ -167,7 +166,7 @@ def aladin_api(keyword, selected_option):
         key = keyword
         print(key)
         url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
-              "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=90853&outofStockFilter=1"
+              "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=798&outofStockFilter=1"
         response = requests.get(url)
         response_json = json.loads(response.text)
         all_data.append(response_json)
