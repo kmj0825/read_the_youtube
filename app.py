@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import re
@@ -17,13 +18,11 @@ from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from PIL import Image
 from io import BytesIO
 
-
-openai_api_key = "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"
-
+openai_api_key = "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"
 
 
 # for API
-import youtube_audio_to_text
+
 # # ==
 
 def youtube_text(link):
@@ -55,8 +54,9 @@ def youtube_text(link):
     return split_docs, full_docs
 
 
-def youtube_sum(split_docs, full_docs):
-    llm = ChatOpenAI(temperature=0.7, openai_api_key=openai_api_key)
+def youtube_sum(split_docs, full_docs, API_KEY):
+    openai_key = API_KEY
+    llm = ChatOpenAI(temperature=0.7, openai_api_key=openai_key)
 
     # Map prompt
     map_template = """The following is a set of documents
@@ -68,25 +68,40 @@ def youtube_sum(split_docs, full_docs):
 
     # Reduce prompt
     reduce_template = """The following is set of summaries:
-        {doc_summaries}
-        You need to output Keyword from the above Video.
-         Choose your keywords
-        The keywords have the following conditions
-        - Must be written in Korean
-        - Must be a single word
-        - Must be a word that appears in the Video
-        - Must be a word that is not a stopword
-        - Must be a word that is not a proper noun
-        - Must be a word that is not a preposition
-        - Must be a word that is not a conjunction
-        - Must be a word that is not an interjection
-        - Must be a word that is not an adjective
-        - Must be a word that is not an adverb
-        - Output a total of 3 keywords
-        - Choose words you might use to search for a book title !
-        Here is an example of the final output
-        Keyword: Keyword1,Keyword2,Keyword3 
-        Helpful Answer:"""
+    {doc_summaries}
+    You need to output two things from the above Video. 
+    1. Write an executive summary 
+    Read the following documents and write a summary that integrates them to quickly identify the main topics of the Video.
+    Your summary should. 
+    - Must be written in Korean 
+    - Be a single paragraph
+    - Be descriptive and detailed so that you can tell at a glance what is being said without having to look at the original Video. 
+    2. Choose your keyword 
+    The keywords have the following conditions 
+    - Must be written in Korean 
+    - Must be a single word 
+    - Must be a noun 
+    - Must be a word that appears in the Video 
+    - Must be a word that is not a stopword 
+    - Must be a word that is not a proper noun 
+    - Must be a word that is not a number 
+    - Must be a word that is not a verb 
+    - Must be a word that is not a pronoun 
+    - Must be a word that is not a preposition 
+    - Must be a word that is not a conjunction 
+    - Must be a word that is not an interjection 
+    - Must be a word that is not an adjective 
+    - Must be a word that is not an adverb 
+    - Must be a word that is not a determiner 
+    - Must be a word that is not a particle 
+    - Must be a word that is not a numeral 
+    - Output only one keyword
+
+    Here is an example of the final output
+    Summary: Document_summary
+    Keyword: keyword
+
+    Helpful Answer:"""
 
     reduce_prompt = PromptTemplate.from_template(reduce_template)
 
@@ -128,73 +143,66 @@ def youtube_sum(split_docs, full_docs):
 
 
 def text_to_arr(result):
-    parts = re.split(r'Keyword:', result, flags=re.IGNORECASE)
-    # Take the last part (the actual keywords), strip whitespace, and split by commas
-    keywords = parts[-1].strip().split(", ")
-    # Now 'keywords' is an array (list in Python) containing the extracted keywords
-    print(keywords)
+    text = result
 
-    return keywords
+    # Regular expression to find the keyword
+    match = re.search(r"Keyword:\s*(\w+)", text)
 
 
-def aladin_api(keywords, selected_option):
+    if match:
+        keyword = match.group(1)
+        print("Keyword:", keyword) # The keyword is in the first capturing group
+    else:
+        match = re.search(r"키워드:\s*(\w+)", text)
+        keyword = match.group(1)  # No keyword found
+        print("Keyword:", keyword)
+
+    return keyword
+
+
+def aladin_api(keyword, selected_option):
     aladin_key = 'ttbkangmj08250027001'
+    keyword = keyword
     all_data = []
-    title = []
-    keyword = keywords
     if selected_option == "사회":
-        for key in keyword:
-            print(key)
-            url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
-                  "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=90853&outofStockFilter=1"
-            response = requests.get(url)
-            response_json = json.loads(response.text)
-            all_data.append(response_json)
-        # request 보내기
-        all_data = json.dumps(all_data, ensure_ascii=False, indent=4)
-        with open("book.json", "wb") as f:
-            f.write(all_data.encode("utf-8"))
-
+        key = keyword
+        print(key)
+        url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
+              "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=90853&outofStockFilter=1"
+        response = requests.get(url)
+        response_json = json.loads(response.text)
+        all_data.append(response_json)
 
     elif selected_option == "과학":
-        for key in keyword:
-            print(key)
-            url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
-                  "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=987&outofStockFilter=1"
-            response = requests.get(url)
-            response_json = json.loads(response.text)
-            all_data.append(response_json)
-        # request 보내기
-        all_data = json.dumps(all_data, ensure_ascii=False, indent=4)
-        with open("book.json", "wb") as f:
-            f.write(all_data.encode("utf-8"))
+        key = keyword
+        print(key)
+        url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
+              "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=987&outofStockFilter=1"
+        response = requests.get(url)
+        response_json = json.loads(response.text)
+        all_data.append(response_json)
 
     elif selected_option == "소설":
-        for key in keyword:
-            print(key)
-            url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
-                  "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=1&outofStockFilter=1"
-            response = requests.get(url)
-            response_json = json.loads(response.text)
-            all_data.append(response_json)
-        # request 보내기
-        all_data = json.dumps(all_data, ensure_ascii=False, indent=4)
-        with open("book.json", "wb") as f:
-            f.write(all_data.encode("utf-8"))
+        key = keyword
+        print(key)
+        url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
+              "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=1&outofStockFilter=1"
+        response = requests.get(url)
+        response_json = json.loads(response.text)
+        all_data.append(response_json)
 
     elif selected_option == "경제경영":
-        for key in keyword:
-            print(key)
-            url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
-                  "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=170&outofStockFilter=1"
-            response = requests.get(url)
-            response_json = json.loads(response.text)
-            all_data.append(response_json)
+        key = keyword
+        url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
+              "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=170&outofStockFilter=1"
+        response = requests.get(url)
+        response_json = json.loads(response.text)
+        all_data.append(response_json)
         # request 보내기
-        all_data = json.dumps(all_data, ensure_ascii=False, indent=4)
-        with open("book.json", "wb") as f:
-            f.write(all_data.encode("utf-8"))
-
+    all_data = json.dumps(all_data, ensure_ascii=False, indent=4)
+    with open("book.json", "wb") as f:
+        f.write(all_data.encode("utf-8"))
+    print(type(all_data))
     print(all_data)
     return all_data
 
@@ -202,7 +210,7 @@ def aladin_api(keywords, selected_option):
 def book_output(book_json):
     data = json.loads(book_json)
 
-    if len(data[0]['item']) != 0:
+    if len(data[0]['item'][0]) != 0:
         title1 = data[0]['item'][0]['title']
         book_link1 = data[0]['item'][0]['link']
         cover_link1 = data[0]['item'][0]['cover']
@@ -213,10 +221,10 @@ def book_output(book_json):
         book_link1 = "No Data"
         image1 = "No Data"
 
-    if len(data[1]['item']) != 0:
-        title2 = data[1]['item'][0]['title']
-        book_link2 = data[1]['item'][0]['link']
-        cover_link2 = data[1]['item'][0]['cover']
+    if len(data[0]['item'][1]) != 0:
+        title2 = data[0]['item'][1]['title']
+        book_link2 = data[0]['item'][1]['link']
+        cover_link2 = data[0]['item'][1]['cover']
         response2 = requests.get(cover_link2)
         image2 = Image.open(BytesIO(response2.content))
     else:
@@ -224,10 +232,10 @@ def book_output(book_json):
         book_link2 = "No Data"
         image2 = "No Data"
 
-    if len(data[2]['item']) != 0:
-        title3 = data[2]['item'][0]['title']
-        book_link3 = data[2]['item'][0]['link']
-        cover_link3 = data[2]['item'][0]['cover']
+    if len(data[0]['item'][2]) != 0:
+        title3 = data[0]['item'][2]['title']
+        book_link3 = data[0]['item'][2]['link']
+        cover_link3 = data[0]['item'][2]['cover']
         response3 = requests.get(cover_link3)
         image3 = Image.open(BytesIO(response3.content))
     else:
@@ -250,7 +258,7 @@ def process_selection(input_list):
 
 def get_title(API_KEY, link, selected_option):
     docs, split_docs = youtube_text(link)
-    result = youtube_sum(docs, split_docs)
+    result = youtube_sum(docs, split_docs, API_KEY)
     keywords = text_to_arr(result)
     all_data = aladin_api(keywords, selected_option)
     title1, image1, title2, image2, title3, image3 = book_output(all_data)
@@ -264,7 +272,7 @@ iface = gr.Interface(fn=get_title, inputs=[gr.Textbox(label="Your OpenAI KEY"),
                                            gr.Textbox(label="Input Link"),
                                            gr.Dropdown(choices=options_list, label="Select a category")],
                      outputs=[
-                         gr.Textbox(label="Keywords"),
+                         gr.Textbox(label="Summary"),
                          gr.Textbox(label="Title1"),
                          gr.Image(label="Image1"),
                          gr.Textbox(label="Title2"),
@@ -273,3 +281,5 @@ iface = gr.Interface(fn=get_title, inputs=[gr.Textbox(label="Your OpenAI KEY"),
                          gr.Image(label="Image3"),
                      ])
 iface.launch()
+
+with gr.blocks as demo : 
