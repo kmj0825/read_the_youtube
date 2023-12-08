@@ -243,7 +243,7 @@ def book_output(book_json):
         book_link3 = "No Data"
         image3 = "No Data"
 
-    return title1, image1, title2, image2, title3, image3
+    return title1, image1, title2, image2, title3, image3, book_link1, book_link2, book_link3
 
 
 def process_selection(input_list):
@@ -261,25 +261,37 @@ def get_title(API_KEY, link, selected_option):
     result = youtube_sum(docs, split_docs, API_KEY)
     keywords = text_to_arr(result)
     all_data = aladin_api(keywords, selected_option)
-    title1, image1, title2, image2, title3, image3 = book_output(all_data)
-    return result, title1, image1, title2, image2, title3, image3
+    title1, image1, title2, image2, title3, image3, link1, link2, link3 = book_output(all_data)
+    return result, title1, image1, title2, image2, title3, image3, link1, link2, link3
 
 
 # Define the list of options for the Dropdown
 options_list = ["사회", "과학", "소설", "경제경영"]
 
-iface = gr.Interface(fn=get_title, inputs=[gr.Textbox(label="Your OpenAI KEY"),
-                                           gr.Textbox(label="Input Link"),
-                                           gr.Dropdown(choices=options_list, label="Select a category")],
-                     outputs=[
-                         gr.Textbox(label="Summary"),
-                         gr.Textbox(label="Title1"),
-                         gr.Image(label="Image1"),
-                         gr.Textbox(label="Title2"),
-                         gr.Image(label="Image2"),
-                         gr.Textbox(label="Title3"),
-                         gr.Image(label="Image3"),
-                     ])
-iface.launch()
+with gr.Blocks() as demo:
+    gr.Markdown("Paste your Youtube Link and get the book recommandation")
+    with gr.Column():
+        with gr.Row():
+            inp1 = gr.Textbox(label="Your OpenAI KEY")
+            inp2 = gr.Textbox(label="Input Link")
+        inp3 = gr.Dropdown(choices=options_list, label="Select a category")
+        btn = gr.Button("Find the book")
 
-with gr.blocks as demo : 
+    with gr.Column():
+        out1 = gr.Textbox(label="Summary")
+        with gr.Row():
+            out2 = gr.Textbox(label="Title1")
+            out4 = gr.Textbox(label="Title2")
+            out6 = gr.Textbox(label="Title3")
+        with gr.Row():
+            out3 = gr.Image(label="Image1")
+            out5 = gr.Image(label="Image2")
+            out7 = gr.Image(label="Image3")
+        with gr.Row():
+            out8 = gr.HTML(label="Book Link1")
+            out9 = gr.HTML(label="Book Link2")
+            out10 = gr.HTML(label="Book Link3")
+    btn.click(fn=get_title, inputs=[inp1,inp2,inp3], outputs=[out1, out2, out3, out4, out5, out6, out7, out8, out9, out10])
+
+demo.launch()
+
