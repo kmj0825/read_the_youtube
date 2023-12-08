@@ -28,7 +28,7 @@ openai_api_key = "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"
 def youtube_text(link):
     yt = YouTube(link)
     yt.streams.filter(only_audio=True).first().download \
-        (output_path=".", filename="test.mp3")
+        (output_path=".", filename="temp/test.mp3")
 
     start = time.time()
     model = whisper.load_model("small")
@@ -48,7 +48,7 @@ def youtube_text(link):
 
     split_docs = text_splitter.split_documents(docs)
 
-    with open("split_example_small.pkl", "wb") as f:
+    with open("temp/split_example_small.pkl", "wb") as f:
         pickle.dump(split_docs, f)
 
     return split_docs, full_docs
@@ -137,7 +137,7 @@ def youtube_sum(split_docs, full_docs, API_KEY):
     # Run
     result = map_reduce_chain.run(split_docs)
     print(result)
-    with open("result.txt", "w") as f:
+    with open("temp/result.txt", "w") as f:
         f.write(result)
     return result
 
@@ -148,10 +148,9 @@ def text_to_arr(result):
     # Regular expression to find the keyword
     match = re.search(r"Keyword:\s*(\w+)", text)
 
-
     if match:
         keyword = match.group(1)
-        print("Keyword:", keyword) # The keyword is in the first capturing group
+        print("Keyword:", keyword)  # The keyword is in the first capturing group
     else:
         match = re.search(r"키워드:\s*(\w+)", text)
         keyword = match.group(1)  # No keyword found
@@ -191,7 +190,7 @@ def aladin_api(keyword, selected_option):
         response_json = json.loads(response.text)
         all_data.append(response_json)
 
-    elif selected_option == "경제경영":
+    elif selected_option == "금융":
         key = keyword
         url = f"http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey={aladin_key}&Query={key}&QueryType=Keyword&Cover=Big&MaxResults=5" \
               "&start=1&SearchTarget=Book&output=js&Sort=SalesPoint&Version=20131101&CategoryId=170&outofStockFilter=1"
@@ -200,7 +199,7 @@ def aladin_api(keyword, selected_option):
         all_data.append(response_json)
         # request 보내기
     all_data = json.dumps(all_data, ensure_ascii=False, indent=4)
-    with open("book.json", "wb") as f:
+    with open("temp/book.json", "wb") as f:
         f.write(all_data.encode("utf-8"))
     print(type(all_data))
     print(all_data)
@@ -219,7 +218,7 @@ def book_output(book_json):
     else:
         title1 = "No Data"
         book_link1 = "No Data"
-        image1 = "No Data"
+        image1 = Image.open("NO DATA.jpeg")
 
     if len(data[0]['item'][1]) != 0:
         title2 = data[0]['item'][1]['title']
@@ -230,7 +229,7 @@ def book_output(book_json):
     else:
         title2 = "No Data"
         book_link2 = "No Data"
-        image2 = "No Data"
+        image2 = Image.open("NO DATA.jpeg")
 
     if len(data[0]['item'][2]) != 0:
         title3 = data[0]['item'][2]['title']
@@ -241,19 +240,9 @@ def book_output(book_json):
     else:
         title3 = "No Data"
         book_link3 = "No Data"
-        image3 = "No Data"
+        image3 = Image.open("NO DATA.jpeg")
 
     return title1, image1, title2, image2, title3, image3, book_link1, book_link2, book_link3
-
-
-def process_selection(input_list):
-    # Your processing logic here for the selected option
-    API_KEY = input_list[0]
-    link = input_list[1]
-    selected_option = input_list[2]
-    result = f"You selected: {selected_option}"
-    print(result)
-    return API_KEY, link, selected_option
 
 
 def get_title(API_KEY, link, selected_option):
@@ -266,7 +255,7 @@ def get_title(API_KEY, link, selected_option):
 
 
 # Define the list of options for the Dropdown
-options_list = ["사회", "과학", "소설", "경제경영"]
+options_list = ["사회", "과학", "소설", "금융"]
 
 with gr.Blocks() as demo:
     gr.Markdown("Paste your Youtube Link and get the book recommandation")
@@ -291,7 +280,7 @@ with gr.Blocks() as demo:
             out8 = gr.HTML(label="Book Link1")
             out9 = gr.HTML(label="Book Link2")
             out10 = gr.HTML(label="Book Link3")
-    btn.click(fn=get_title, inputs=[inp1,inp2,inp3], outputs=[out1, out2, out3, out4, out5, out6, out7, out8, out9, out10])
+    btn.click(fn=get_title, inputs=[inp1, inp2, inp3],
+              outputs=[out1, out2, out3, out4, out5, out6, out7, out8, out9, out10])
 
 demo.launch()
-

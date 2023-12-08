@@ -9,7 +9,7 @@ import whisper
 def youtube_audio_to_text(link):
     yt = YouTube(link)
     yt.streams.filter(only_audio=True).first().download \
-        (output_path=".", filename="test.mp3")
+        (output_path="..", filename="test.mp3")
 
     start = time.time()
     model = whisper.load_model("small")
