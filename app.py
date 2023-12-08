@@ -18,7 +18,7 @@ from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from PIL import Image
 from io import BytesIO
 
-openai_api_key = "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"
+openai_api_key = ""
 
 
 # for API
