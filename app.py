@@ -47,7 +47,7 @@ def youtube_text(link):
 
     split_docs = text_splitter.split_documents(docs)
 
-    with open("temp/split_example_small.pkl", "wb") as f:
+    with open("../../Desktop/23-2-Local/OS/temp/split_example_small.pkl", "wb") as f:
         pickle.dump(split_docs, f)
 
     return split_docs, full_docs
@@ -136,7 +136,7 @@ def youtube_sum(split_docs, full_docs, API_KEY):
     # Run
     result = map_reduce_chain.run(split_docs)
     print(result)
-    with open("temp/result.txt", "w") as f:
+    with open("../../Desktop/23-2-Local/OS/temp/result.txt", "w") as f:
         f.write(result)
     return result
 
@@ -198,7 +198,7 @@ def aladin_api(keyword, selected_option):
         all_data.append(response_json)
         # request 보내기
     all_data = json.dumps(all_data, ensure_ascii=False, indent=4)
-    with open("temp/book.json", "wb") as f:
+    with open("../../Desktop/23-2-Local/OS/temp/book.json", "wb") as f:
         f.write(all_data.encode("utf-8"))
     print(type(all_data))
     print(all_data)
