@@ -11,6 +11,8 @@ but I thought about it more deeply.
 
 Let me give you an example. 
 ![](https://i.imgur.com/D3VFRDW.jpg)
+
+![](https://i.imgur.com/OXcj9CS.png)
 Henry, 24, took a break from YouTube and went to the library to read a book. It's been a while since I've read a book, and I'm not sure what to read, so let's take a look at the new book section first. 
 There are a lot of different books, but they all have colorful covers, and they all look interesting. I pick up a novel among them. As you read the front, you glance over and see an economics book with a "buy now to succeed" tagline. You decide that reading an economics book will be much more progressive than reading a novel. After reading a few chapters, you realize you're not interested and put the book down. 
 Still, since I'm in the library, I think I should take a look at the books in my major. Henry is majoring in computer science, so I go to the engineering section and see that it's stacked with books again. I think I need to learn this, I think I need to learn that. In the end, I leave the library without picking a book.
@@ -45,8 +47,14 @@ Expand your knowledge with our programs !
 2. Your Favorite <font color="#c00000">Youtube</font> Link
 
 # How Can I Use It?  
+If You Want to use in Local! 
 1. Clone this repository and Run the app.py in your Terminal
-```python 
+```python
+git clone https://github.com/kmj0825/read_the_youtube.git
+pip install -q gradio requests
+pip install -q openai tiktoken langchain
+pip install -q openai-whisper pytube
+cd read_the_youtube 
 python app.py    
 ```
 2. Click on the URL. 
