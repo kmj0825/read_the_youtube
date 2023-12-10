@@ -7,9 +7,9 @@ Why don't people read books?
 1. YouTube or SNS is more fun. 
 2. videos are easier to understand and absorb information than books 
 
-but I thought about it more deeply. 
+### but I thought about it more deeply. 
 
-Let me give you an example. 
+## Let me give you an example. 
 ![](https://i.imgur.com/D3VFRDW.jpg)
 
 ![](https://i.imgur.com/OXcj9CS.png)
@@ -63,6 +63,8 @@ It will be up for 3 days, so I will be constantly modifying it. 😄
 
 ## If You Want to use in Local! 
 1. Clone this repository and Run the app.py in your Terminal
+
+( I Made this with Python 3.9 if your python version is lower than 3.9, than you can get an error.. )
 ```python
 git clone https://github.com/kmj0825/read_the_youtube.git
 pip install -q gradio requests
