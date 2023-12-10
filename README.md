@@ -47,8 +47,14 @@ Expand your knowledge with our programs !
 2. Your Favorite <font color="#c00000">Youtube</font> Link
 
 # How Can I Use It?  
+If You Want to use in Local! 
 1. Clone this repository and Run the app.py in your Terminal
-```python 
+```python
+git clone https://github.com/kmj0825/read_the_youtube.git
+pip install -q gradio requests
+pip install -q openai tiktoken langchain
+pip install -q openai-whisper pytube
+cd read_the_youtube 
 python app.py    
 ```
 2. Click on the URL. 
