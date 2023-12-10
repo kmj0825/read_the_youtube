@@ -68,9 +68,10 @@ def youtube_sum(split_docs, full_docs, API_KEY):
     Read the following transcripts and write a summary that integrates them to quickly identify the main topics of the Video.
     Your summary should. 
     - Must be written in Korean 
-    - It should be a single paragraph, but that doesn't mean it has to be too short. 
-    - Be descriptive and detailed so that you can tell at a glance what is being said without having to look at the original Video.
-    - Be nice and explain in detail. 
+    - Be a 1~2 paragraph
+    - Be descriptive and detailed so that you can tell at a glance what is being said without having to look at the original Video. 
+    - There are no more than three main topics in the video. 
+    - Please also briefly describe the overall content of the video  
     2. Choose your keyword 
     The keywords have the following conditions 
     - Must be written in Korean 
@@ -93,9 +94,11 @@ def youtube_sum(split_docs, full_docs, API_KEY):
     - Output only one keyword
 
     Here is an example of the final output
+    
     Summary: summary of Video transcripts
     Keyword: keyword
-
+    
+    Don't output any other text outside of the given format
     Helpful Answer:"""
 
     reduce_prompt = PromptTemplate.from_template(reduce_template)
