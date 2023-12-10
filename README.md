@@ -14,12 +14,16 @@ Let me give you an example.
 
 ![](https://i.imgur.com/OXcj9CS.png)
 Henry, 24, took a break from YouTube and went to the library to read a book. It's been a while since I've read a book, and I'm not sure what to read, so let's take a look at the new book section first. 
+
 There are a lot of different books, but they all have colorful covers, and they all look interesting. I pick up a novel among them. As you read the front, you glance over and see an economics book with a "buy now to succeed" tagline. You decide that reading an economics book will be much more progressive than reading a novel. After reading a few chapters, you realize you're not interested and put the book down. 
+
 Still, since I'm in the library, I think I should take a look at the books in my major. Henry is majoring in computer science, so I go to the engineering section and see that it's stacked with books again. I think I need to learn this, I think I need to learn that. In the end, I leave the library without picking a book.
 
 What do you think, haven't we all had this experience? 
+
 The above example is something I often experience whenever I go to the school library.
-If I don't go in with a book to read, I quickly get lost for 3-40 minutes. 
+
+If you don't go in with an idea of what you want to read, those 30-40 minutes will go by quickly.
 
 
 # This is what I focused on. 
