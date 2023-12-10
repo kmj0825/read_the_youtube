@@ -20,11 +20,6 @@ from io import BytesIO
 
 openai_api_key = ""
 
-
-# for API
-
-# # ==
-
 def youtube_text(link):
     yt = YouTube(link)
     yt.streams.filter(only_audio=True).first().download(output_path=".", filename="test.mp3")
@@ -58,9 +53,9 @@ def youtube_sum(split_docs, full_docs, API_KEY):
     llm = ChatOpenAI(temperature=0.7, openai_api_key=openai_key)
 
     # Map prompt
-    map_template = """The following is a set of documents
+    map_template = """The following is a set of Video transcripts
     {docs}
-    Based on this list of docs, please identify the main themes
+    Based on this list of transcripts, please identify the main themes
     Helpful Answer:"""
 
     map_prompt = PromptTemplate.from_template(map_template)
@@ -68,13 +63,14 @@ def youtube_sum(split_docs, full_docs, API_KEY):
     # Reduce prompt
     reduce_template = """The following is set of summaries:
     {doc_summaries}
-    You need to output two things from the above Video. 
+    You need to output two things from the above Video transcripts. 
     1. Write an executive summary 
-    Read the following documents and write a summary that integrates them to quickly identify the main topics of the Video.
+    Read the following transcripts and write a summary that integrates them to quickly identify the main topics of the Video.
     Your summary should. 
     - Must be written in Korean 
-    - Be a single paragraph
-    - Be descriptive and detailed so that you can tell at a glance what is being said without having to look at the original Video. 
+    - It should be a single paragraph, but that doesn't mean it has to be too short. 
+    - Be descriptive and detailed so that you can tell at a glance what is being said without having to look at the original Video.
+    - Be nice and explain in detail. 
     2. Choose your keyword 
     The keywords have the following conditions 
     - Must be written in Korean 
@@ -97,7 +93,7 @@ def youtube_sum(split_docs, full_docs, API_KEY):
     - Output only one keyword
 
     Here is an example of the final output
-    Summary: Document_summary
+    Summary: summary of Video transcripts
     Keyword: keyword
 
     Helpful Answer:"""
