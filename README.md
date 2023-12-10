@@ -52,7 +52,8 @@ Expand your knowledge with our programs !
 
 # How Can I Start It?  
 ## If you want to use a single click ! 
-[READ THE YOUTUBE GRADIO LINK](https://362ce34dcc078c2f76.gradio.live)
+[READ THE YOUTUBE GRADIO LINK](https://8d07a9368ff0146472.gradio.live)
+
 This link is a public URL that is working on my personal computer. 
 
 It will be up for 3 days, so I will be constantly modifying it. 😄
