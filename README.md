@@ -126,3 +126,18 @@ We are planning to change the program to be available for free through a differe
 
 
 [Aladin API](https://docs.google.com/document/d/1mX-WxuoGs8Hy-QalhHcvuV17n50uGI2Sg_GHofgiePE/edit)
+
+# License 
+Our Project is Apache License 2.0 
+
+Below are the license descriptions for the ones we used
+
+[Whisper](https://github.com/openai/whisper/blob/main/LICENSE) : MIT License 
+
+[Langchain](https://github.com/langchain-ai/langchain/blob/master/LICENSE) : MIT License
+
+[gradio](https://github.com/gradio-app/gradio/blob/main/LICENSEv) : Apache License 2.0
+
+[tiktoken](https://github.com/openai/tiktoken/blob/main/LICENSE) : MIT License 
+
+[openai-openapi] (https://github.com/openai/openai-openapi/blob/master/LICENSE) : MIT License 
