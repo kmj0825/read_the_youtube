@@ -58,7 +58,7 @@ This link is a public URL that is working on my personal computer.
 
 It will be up for 3 days, so I will be constantly modifying it. 😄
 
-(Current uploaded link time: 12/10 19:35 ~ 12/13 19:35) 
+(Current uploaded link time: 12/10 19:35 ~ 12/13 19:35) -> The link has expired, I'll re-upload on the afternoon of the 14th.
 
 
 ## If You Want to use in Local! 
